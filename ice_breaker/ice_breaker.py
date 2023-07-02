@@ -3,8 +3,7 @@ from langchain import PromptTemplate
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import LLMChain
 
-from linkedin import scrape_linkedin_profile
-from agents.linkedin_lookup_agent import lookup as linkedin_lookup_agent
+from agents.linkedin_lookup_agent import scrape_linkedin_profile, get_linkedin_url
 
 load_dotenv()
 
@@ -21,7 +20,7 @@ summary_prompt_template = PromptTemplate(
 llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo")
 chain = LLMChain(llm=llm, prompt=summary_prompt_template)
 
-profile_url = linkedin_lookup_agent(name="Eden Marco Udemy")
+profile_url = get_linkedin_url(name="Eden Marco Udemy")
 linkedin_data = scrape_linkedin_profile(profile_url)
 response = chain.run(information=linkedin_data)
 print(response)
