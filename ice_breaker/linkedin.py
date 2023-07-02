@@ -1,7 +1,7 @@
 import requests
 
 
-def scrape_linkedin_profile(profile_url: str):
+def scrape_linkedin_profile(profile_url: str) -> dict:
     """
     Manually scrape information from a LinkedIn profile.
     """
