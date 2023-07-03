@@ -17,7 +17,7 @@ def get_profile_url(text: str) -> str:
     return response
 
 
-def get_linkedin_url(name: str) -> str:
+def get_linkedin_url(name: str, verbose: bool = True) -> str:
     """
     Use an Agent to get the LinkedIn profile URL for a given name.
     """
@@ -44,7 +44,7 @@ def get_linkedin_url(name: str) -> str:
         tools=agent_tools,
         llm=llm,
         agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-        verbose=True,
+        verbose=verbose,
     )
 
     linkedin_profile_url = agent.run(prompt_template.format_prompt(full_name=name))
