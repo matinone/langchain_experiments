@@ -10,7 +10,7 @@ from agents.linkedin_agent import scrape_linkedin_profile, get_linkedin_url
 from output_parsers import person_info_parser, PersonInformation
 
 
-def generate_ice_breaker(name: str) -> PersonInformation:
+def generate_ice_breaker(name: str) -> dict[str, PersonInformation | str]:
     summary_template = """
         Given the LinkedIn information {information} about a person, I need you to create:
         1. A short summary of the person.
@@ -33,12 +33,16 @@ def generate_ice_breaker(name: str) -> PersonInformation:
     chain = LLMChain(llm=llm, prompt=summary_prompt_template)
 
     profile_url = get_linkedin_url(name=name)
-    linkedin_data = scrape_linkedin_profile(profile_url)
+    linkedin_data = scrape_linkedin_profile(profile_url, fake_data=True)
     result = chain.run(information=linkedin_data)
 
-    return person_info_parser.parse(result)
+    return {
+        "person_information": person_info_parser.parse(result),
+        "profile_pic_url": linkedin_data.get("profile_pic_url"),
+    }
 
 
 if __name__ == "__main__":
-    ice_breaker = generate_ice_breaker(name="Eden Marco Udemy")
+    name = "Matias Nicolas Brignone"
+    ice_breaker = generate_ice_breaker(name=name)
     print(ice_breaker)

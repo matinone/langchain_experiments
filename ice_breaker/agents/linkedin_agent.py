@@ -1,4 +1,5 @@
 import requests
+import os
 
 from langchain import PromptTemplate
 from langchain.chat_models import ChatOpenAI
@@ -52,7 +53,7 @@ def get_linkedin_url(name: str, verbose: bool = True) -> str:
     return linkedin_profile_url
 
 
-def scrape_linkedin_profile(profile_url: str) -> dict:
+def scrape_linkedin_profile(profile_url: str, fake_data: bool = True) -> dict:
     """
     Manually scrape information from a LinkedIn profile.
     """
@@ -60,16 +61,19 @@ def scrape_linkedin_profile(profile_url: str) -> dict:
     # This should be done using Proxycurl each time:
     # (https://nubela.co/proxycurl/docs?python#people-api-person-profile-endpoint)
 
-    # api_endpoint = "https://nubela.co/proxycurl/api/v2/linkedin"
-    # api_key = "YOUR_API_KEY"
-    # header_dic = {"Authorization": "Bearer " + api_key}
-    # response = requests.get(api_endpoint, params={"url": profile_url}, headers=header_dic)
-    # return response
+    if not fake_data:
+        api_endpoint = "https://nubela.co/proxycurl/api/v2/linkedin"
+        api_key = os.environ.get("PROXYCURL_API_KEY")
+        header_dic = {"Authorization": "Bearer " + api_key}
+        response_json = requests.get(
+            api_endpoint, params={"url": profile_url}, headers=header_dic
+        ).json()
 
-    # But to save credits, we will use the Proxycurl API only once, upload the response
-    # to a Github gist, and query that information instead.
-    gist_url = "https://gist.githubusercontent.com/emarco177/0d6a3f93dd06634d95e46a2782ed7490/raw/fad4d7a87e3e934ad52ba2a968bad9eb45128665/eden-marco.json"
-    response_json = requests.get(gist_url).json()
+    else:
+        # But to save credits, we will use the Proxycurl API only once, upload the response
+        # to a Github gist, and query that information instead.
+        gist_url = "https://gist.githubusercontent.com/emarco177/0d6a3f93dd06634d95e46a2782ed7490/raw/fad4d7a87e3e934ad52ba2a968bad9eb45128665/eden-marco.json"
+        response_json = requests.get(gist_url).json()
 
     # remove empty fields
     data = {
