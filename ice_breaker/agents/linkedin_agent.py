@@ -26,7 +26,7 @@ def get_linkedin_url(name: str, verbose: bool = True) -> str:
 
     lookup_template = """
         Given the full name {full_name}, I want you to give me the link to the LinkedIn
-        profile pafe of that person.
+        profile page of that person.
         Your answer should only contain a URL, nothing else.
     """
     prompt_template = PromptTemplate(
