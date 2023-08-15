@@ -32,5 +32,5 @@ video_texts = text_splitter.split_documents(video_result)
 
 # map_reduce generates a summary of each document and then generates a summary of the summaries
 summarize_chain = load_summarize_chain(llm=llm, chain_type="map_reduce", verbose=False)
-summary = summarize_chain.run(video_result)
+summary = summarize_chain.run(video_texts)
 print(summary)
